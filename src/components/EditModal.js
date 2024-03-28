@@ -23,7 +23,7 @@ const EditModal = ({ isVisible, toggleModal, onSubmit, placeholder }) => {
           }
         onSubmit({ title, body });
         setTitle("");
-        setContent("");
+        setBody("");
         toggleModal();
     };
 

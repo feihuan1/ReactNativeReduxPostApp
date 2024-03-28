@@ -1,8 +1,33 @@
-import { useState } from "react";
-import { StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
+import { useState } from "react"; 
+import { useDispatch } from "react-redux"; 
+import { addPost } from "../redux/postsSlice";
 
-const Header = () => {
-  const [todo, setTodo] = useState({title: '', body: ''});
+const Form = () => {
+  const [post, setPost] = useState({title: '', body: ''});
+  const dispatch = useDispatch()
+
+  const handlePost = () => {
+    if(!post.title.trim() || !post.body.trim()) {
+      Alert.alert(
+        ' 🖕  ',
+        'Who are you kidding?',
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Pressed'),
+         style: 'cancel',
+          },
+        ],
+        { cancelable: false }
+      );
+      return
+    }
+
+    dispatch(addPost(post)) 
+
+    setPost({title:'', body: ''})
+  }
 
   return (
     <View>
@@ -12,18 +37,18 @@ const Header = () => {
         <TextInput
           style={styles.input}
           placeholder="Title"
-        //   onChange={setTodo}
-          value={todo}
+          value={post.title}
+          onChangeText={(text) => setPost({...post, title: text})}
         />
         <TextInput
           style={styles.input}
-          placeholder="Body"
-        //   onChange={setTodo}
-          value={todo}
+          placeholder="Content"
+          value={post.body}
+          onChangeText={(text) => setPost({...post, body: text})}
         />
         <TouchableOpacity
          style={styles.button} 
-         onPress={() => setTodo('')} 
+         onPress={handlePost} 
         >
             <Text style={styles.buttonTerxt}>Post</Text>
         </TouchableOpacity>
@@ -32,7 +57,7 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Form;
 
 const styles = StyleSheet.create({
   title: {
